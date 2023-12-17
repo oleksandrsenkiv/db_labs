@@ -8,11 +8,6 @@ class CoinsLoadingDAO(GeneralDAO):
     _domain_type = CoinsLoading
 
     def coins_loading_find_technician(self, coins_loading_id: int):
-        """
-        Find solar system associated with a specific owner.
-        :param coins_loading_id: ID of the owner
-        :return: List of SolarSystem objects associated with the owner
-        """
         session = self.get_session()
 
         technicians_ids = (

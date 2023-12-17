@@ -8,11 +8,6 @@ class FundraisingDAO(GeneralDAO):
     _domain_type = Fundraising
 
     def fundraising_find_technician(self, fundraising_id: int):
-        """
-        Find solar system associated with a specific owner.
-        :param fundraising_id: ID of the owner
-        :return: List of SolarSystem objects associated with the owner
-        """
         session = self.get_session()
 
         technicians_ids = (

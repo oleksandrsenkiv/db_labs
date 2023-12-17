@@ -17,6 +17,7 @@ def get_all_snack_availability() -> Response:
     """
     return make_response(jsonify(snack_availability_controller.find_all()), HTTPStatus.OK)
 
+
 @snack_availability_bp.get('/<int:snack_availability_id>/snacks_has_vm_menu')
 def get_all_snacks_vm_menu_from_snack_availability(snack_availability_id) -> Response:
     """
@@ -24,6 +25,7 @@ def get_all_snacks_vm_menu_from_snack_availability(snack_availability_id) -> Res
     :return: Response object
     """
     return make_response(jsonify(snack_availability_controller.snack_availability_find_vm_menu_snacks(snack_availability_id)), HTTPStatus.OK)
+
 
 @snack_availability_bp.post('')
 def create_snack_availability() -> Response:
@@ -58,6 +60,19 @@ def update_snack_availability(snack_availability_id: int) -> Response:
     return make_response("SnackAvailability updated", HTTPStatus.OK)
 
 
+@snack_availability_bp.post('/<int:snack_availability_id>/add_vm_menu_and_snack_to_availability')
+def add_vm_menu_and_snack_to_availability(snack_availability_id) -> Response:
+    try:
+        data = request.get_json()
+        vm_menu_id = data.get('vm_menu_id')
+        snacks_id = data.get('snacks_id')
+        snack_availability_controller.add_vm_menu_and_snack_to_availability(snack_availability_id, vm_menu_id, snacks_id)
+        return make_response(jsonify({"message": "vending_machine and snack_availability added successfully"}), HTTPStatus.OK)
+
+    except Exception as e:
+        return make_response(jsonify({"error": str(e)}), HTTPStatus.INTERNAL_SERVER_ERROR)
+
+
 @snack_availability_bp.patch('/<int:snack_availability_id>')
 def patch_snack_availability(snack_availability_id: int) -> Response:
     """
@@ -67,6 +82,19 @@ def patch_snack_availability(snack_availability_id: int) -> Response:
     content = request.get_json()
     snack_availability_controller.patch(snack_availability_id, content)
     return make_response("SnackAvailability updated", HTTPStatus.OK)
+
+
+@snack_availability_bp.patch('/<int:snack_availability_id>/remove_vm_menu_and_snack_from_availability')
+def remove_vm_menu_and_snack_from_availability(snack_availability_id) -> Response:
+    try:
+        data = request.get_json()
+        vm_menu_id = data.get('vm_menu_id')
+        snacks_id = data.get('snacks_id')
+        snack_availability_controller.remove_vm_menu_and_snack_from_availability(snack_availability_id, vm_menu_id, snacks_id)
+        return make_response(jsonify({"message": "vm_menu and snack_availability removed successfully"}), HTTPStatus.OK)
+
+    except Exception as e:
+        return make_response(jsonify({"error": str(e)}), HTTPStatus.INTERNAL_SERVER_ERROR)
 
 
 @snack_availability_bp.delete('/<int:snack_availability_id>')
