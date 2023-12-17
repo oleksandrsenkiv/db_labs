@@ -30,6 +30,30 @@ def create_brand() -> Response:
     return make_response(jsonify(brand.put_into_dto()), HTTPStatus.CREATED)
 
 
+@brand_bp.post('/<int:brand_id>/add_snack')
+def add_snack_to_brand(brand_id) -> Response:
+    try:
+        data = request.get_json()
+        snacks_id = data.get('snacks_id')
+        brand_controller.add_snacks_to_brand(brand_id, snacks_id)
+        return make_response(jsonify({"message": "Snack added successfully"}), HTTPStatus.OK)
+
+    except Exception as e:
+        return make_response(jsonify({"error": str(e)}), HTTPStatus.INTERNAL_SERVER_ERROR)
+
+
+@brand_bp.post('/add_brand')
+def add_brand() -> Response:
+    try:
+        data = request.get_json()
+        brand_name = data.get('brand_name')
+        brand_controller.add_brand(brand_name)
+        return make_response(jsonify({"message": "Brand added successfully"}), HTTPStatus.OK)
+
+    except Exception as e:
+        return make_response(jsonify({"error": str(e)}), HTTPStatus.INTERNAL_SERVER_ERROR)
+
+
 @brand_bp.get('/<int:brand_id>')
 def get_brand(brand_id: int) -> Response:
     """
@@ -69,6 +93,18 @@ def patch_brand(brand_id: int) -> Response:
     content = request.get_json()
     brand_controller.patch(brand_id, content)
     return make_response("Brand updated", HTTPStatus.OK)
+
+
+@brand_bp.patch('/<int:brand_id>/remove_snack')
+def remove_snack_from_brand(brand_id) -> Response:
+    try:
+        data = request.get_json()
+        snacks_id = data.get('snacks_id')
+        brand_controller.remove_snack_from_brand(brand_id, snacks_id)
+        return make_response(jsonify({"message": "Snack removed successfully"}), HTTPStatus.OK)
+
+    except Exception as e:
+        return make_response(jsonify({"error": str(e)}), HTTPStatus.INTERNAL_SERVER_ERROR)
 
 
 @brand_bp.delete('/<int:brand_id>')

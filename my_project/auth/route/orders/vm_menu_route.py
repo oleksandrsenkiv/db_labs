@@ -37,6 +37,19 @@ def create_vm_menu() -> Response:
     return make_response(jsonify(vm_menu.put_into_dto()), HTTPStatus.CREATED)
 
 
+@vm_menu_bp.post('/<int:vm_menu_id>/add_vending_availability_to_vm_menu')
+def add_snack_and_availability_to_vm_menu(vm_menu_id) -> Response:
+    try:
+        data = request.get_json()
+        snacks_id = data.get('snacks_id')
+        snack_availability_id = data.get('snack_availability_id')
+        vm_menu_controller.add_snack_and_availability_to_vm_menu(vm_menu_id, snacks_id, snack_availability_id)
+        return make_response(jsonify({"message": "snacks and snack_availability added successfully"}), HTTPStatus.OK)
+
+    except Exception as e:
+        return make_response(jsonify({"error": str(e)}), HTTPStatus.INTERNAL_SERVER_ERROR)
+
+
 @vm_menu_bp.get('/<int:vm_menu_id>')
 def get_vm_menu(vm_menu_id: int) -> Response:
     """
@@ -67,6 +80,20 @@ def patch_vm_menu(vm_menu_id: int) -> Response:
     content = request.get_json()
     vm_menu_controller.patch(vm_menu_id, content)
     return make_response("VmMenu updated", HTTPStatus.OK)
+
+
+@vm_menu_bp.patch('/<int:vm_menu_id>/remove_vm_menu_and_availability_from_vm_menu')
+def remove_vm_menu_and_availability_from_snack(vm_menu_id) -> Response:
+    try:
+        data = request.get_json()
+        snacks_id = data.get('snacks_id')
+        snack_availability_id = data.get('snack_availability_id')
+        vm_menu_controller.remove_snack_and_availability_from_vm_menu(vm_menu_id, snacks_id, snack_availability_id)
+        return make_response(jsonify({"message": "snack and snack_availability removed successfully"}), HTTPStatus.OK)
+
+    except Exception as e:
+        return make_response(jsonify({"error": str(e)}), HTTPStatus.INTERNAL_SERVER_ERROR)
+
 
 
 @vm_menu_bp.delete('/<int:vm_menu_id>')

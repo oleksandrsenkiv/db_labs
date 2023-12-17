@@ -32,3 +32,25 @@ class SnackAvailabilityDAO(GeneralDAO):
             "vm_menus": [vm_menu.put_into_dto() for vm_menu in vm_menus],
             "snacks": [snack.put_into_dto() for snack in snacks]
         }
+
+    def add_vm_menu_and_snack_to_availability(self, snack_availability_id: int, vm_menu_id: int, snacks_id: int):
+        session = self.get_session()
+
+        association = snacks_has_vm_menu.insert().values(
+            snack_availability_id=snack_availability_id,
+            vm_menu_id=vm_menu_id,
+            snacks_id=snacks_id
+        )
+
+        session.execute(association)
+        session.commit()
+
+    def remove_vm_menu_and_snack_from_availability(self, snack_availability_id: int, vm_menu_id: int, snacks_id: int):
+        session = self.get_session()
+        session.execute(
+            snacks_has_vm_menu.delete()
+            .where(snacks_has_vm_menu.c.snack_availability_id == snack_availability_id)
+            .where(snacks_has_vm_menu.c.vm_menu_id == vm_menu_id)
+            .where(snacks_has_vm_menu.c.snacks_id == snacks_id)
+        )
+        session.commit()

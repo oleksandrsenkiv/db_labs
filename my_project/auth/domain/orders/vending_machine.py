@@ -12,7 +12,6 @@ class VendingMachine(db.Model, IDto):
     gps_id = db.Column(db.Integer, db.ForeignKey('gps.id'), nullable=False)
     address = db.Column(db.String(255),  nullable=False)
     vm_menu_id = db.Column(db.Integer, db.ForeignKey('vm_menu.id'))
-    # Relationship M:1 with ElectricityPrice
     gps = db.relationship("Gps", backref="vending_machine_gps_")
     vm_menu = db.relationship("VmMenu", backref="vending_machine_")
 
@@ -22,7 +21,7 @@ class VendingMachine(db.Model, IDto):
     def put_into_dto(self) -> Dict[str, Any]:
         return {
             "id": self.id,
-            "gps_id": self.gps_id,
+            "gps": self.gps_id,
             "address": self.address,
             "vm_menu_id": self.vm_menu_id
         }

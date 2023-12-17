@@ -17,6 +17,7 @@ def get_all_product_loading() -> Response:
     """
     return make_response(jsonify(product_loading_controller.find_all()), HTTPStatus.OK)
 
+
 @product_loading_bp.get('/<int:product_loading_id>')
 def get_gps(product_loading_id: int) -> Response:
     """
@@ -25,6 +26,7 @@ def get_gps(product_loading_id: int) -> Response:
     """
     return make_response(jsonify(product_loading_controller.find_by_id(product_loading_id)), HTTPStatus.OK)
 
+
 @product_loading_bp.get('/<int:product_loading_id>/technician_has_product_loading')
 def get_all_technician_from_product_loading(product_loading_id) -> Response:
     """
@@ -32,6 +34,11 @@ def get_all_technician_from_product_loading(product_loading_id) -> Response:
     :return: Response object
     """
     return make_response(jsonify(product_loading_controller.product_loading_find_technician(product_loading_id)), HTTPStatus.OK)
+
+
+@product_loading_bp.get('/get_product_loading_stats/<stats_type>')
+def get_product_loading_stats(stats_type: str) -> Response:
+    return make_response(jsonify(product_loading_controller.get_product_loading_stats(stats_type)), HTTPStatus.OK)
 
 
 @product_loading_bp.post('')
